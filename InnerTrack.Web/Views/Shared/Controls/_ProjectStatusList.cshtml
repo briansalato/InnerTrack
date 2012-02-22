@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ListItemProjectStatusModel>
+
+@if (Model != null
+     && Model.Count() > 0)
+{
+    <ul class="projectStatusList">
+        @foreach (var item in Model)
+        {
+            <li>
+                <div class="header">
+                    <span>@item.Name</span>
+                </div>
+                <div class="content">
+                    @item.Status
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div>No Projects</div>
+}

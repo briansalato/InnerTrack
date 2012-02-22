@@ -1,0 +1,20 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+#region -<#= Model.Model #>
+public static string <#= Model.Model #>_Edit(this UrlHelper helper, int? id)
+{
+    return helper.Action("Edit", "<#= Model.Model #>", new { id = id });
+}
+public static string <#= Model.Model #>_Create(this UrlHelper helper)
+{
+    return helper.Action("Edit", "<#= Model.Model #>");
+}
+public static string <#= Model.Model #>_Show(this UrlHelper helper, int id)
+{
+    return helper.Action("Show", "<#= Model.Model #>", new { id = id });
+}
+public static string <#= Model.Model #>_Index(this UrlHelper helper)
+{
+    return helper.Action("Index", "<#= Model.Model #>");
+}
+#endregion

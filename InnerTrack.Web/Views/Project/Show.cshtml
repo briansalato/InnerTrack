@@ -1,0 +1,34 @@
+﻿@model ShowProjectModel
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h2>@Model.Name</h2>
+
+<a href="@Url.Project_Edit(Model.Id)">Edit</a>
+
+<div>
+    @Html.LabelFor(m => m.Description)
+    @Html.DisplayFor(m => m.Description)
+</div>
+
+<h3>Tags</h3>
+<ul>
+    @foreach (var tag in Model.Tags)
+    { 
+        <li>@tag.Name</li>
+    }
+</ul>
+
+<h3>Feeds</h3>
+<a href="@Url.Feed_Create(Model.Id)">Create a Feed</a>
+<a href="@Url.Feed_Associate(Model.Id)">Associate a Feed</a>
+<ul>
+    @foreach (var feed in Model.Feeds)
+    { 
+        <li><a href="@Url.Feed_Show(feed.Id)">@feed.Type</a></li>
+    }
+</ul>
+
+<a href="@Url.Project_Index()">Project List</a>

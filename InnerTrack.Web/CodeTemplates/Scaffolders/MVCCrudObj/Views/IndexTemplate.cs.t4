@@ -1,0 +1,19 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cshtml" #>
+@model List<#= Model.Model #>Model
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2><#= Model.Model #>s</h2>
+
+<a href="@Url.<#= Model.Model #>_Create()">Add New</a>
+<ul>
+    @foreach(var item in Model.<#= Model.Model #>s)
+    {
+        <li>
+            <a href="@Url.<#= Model.Model #>_Show(item.Id)">@item.Id</a>
+        </li>
+    }
+</ul>

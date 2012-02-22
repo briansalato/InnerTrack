@@ -1,0 +1,16 @@
+﻿@model DashboardModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="half">
+    <div class="leftWrapper">
+        @Html.Partial("Controls/_ProjectStatusList", Model.ProjectStatuses)
+    </div>
+</div>
+
+<div class="half">
+    <div class="rightWrapper">
+        @Html.Partial("Controls/_EventList", Model.FeedEvents)
+    </div>
+</div>

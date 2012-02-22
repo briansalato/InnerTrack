@@ -1,0 +1,13 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cshtml" #>
+@model Show<#= Model.Model #>Model
+
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>@Model.Id</h2>
+
+<a href="@Url.<#= Model.Model #>_Edit(Model.Id)">Edit</a>
+
+<a href="@Url.<#= Model.Model #>_Index()"><#= Model.Model #> List</a>

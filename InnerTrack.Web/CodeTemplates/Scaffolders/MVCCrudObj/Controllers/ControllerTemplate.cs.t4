@@ -1,0 +1,113 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using <#= Model.CommonNamespace #>.Interfaces.Database;
+using <#= Model.CommonNamespace #>.Interfaces.Logic;
+using <#= Model.CommonNamespace #>.Objs;
+using <#= Model.WebNamespace #>.Helpers;
+using <#= Model.WebNamespace #>.Models;
+
+namespace <#= Model.WebNamespace #>.Controllers
+{
+    public class <#= Model.Model #>Controller : BaseController
+    {
+        [HttpGet]
+        public ActionResult Edit(int? id = null)
+        {
+            Edit<#= Model.Model #>Model model = null;
+            if (id.HasValue)
+            {
+                var obj = <#= Model.Model #>Logic.Get(id.Value);
+                if (obj != null)
+                {
+                    model = ModelConverter.ConvertToEdit(obj);
+                }
+                else
+                {
+                    this.AddWarning("No<#= Model.Model #>Found", "No <#= Model.Model #> was found with that Id. Switching to Create mode.");
+                    return Redirect(Url.<#= Model.Model #>_Create());
+                }
+            }
+
+            if (model == null)
+            {
+                model = new Edit<#= Model.Model #>Model();
+            }
+            return View("Edit", model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Edit<#= Model.Model #>Model model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Redirect(Url.<#= Model.Model #>_Edit(model.Id));
+            }
+            <#= Model.Model #>Obj obj;
+            if (!model.Id.HasValue) 
+            {
+                obj = ModelConverter.Convert(model);
+                obj.Id = <#= Model.Model #>Logic.Create(obj, CurrentUserName);
+                if (obj.Id == -1) 
+                {
+                    this.AddError("Creating<#= Model.Model #>", "There was an error creating your <#= Model.Model #>. If this continues contact support.");
+                    return Redirect(Url.<#= Model.Model #>_Create());
+                }
+            }
+            else
+            {
+                obj = ModelConverter.Convert(model);
+                var success = <#= Model.Model #>Logic.Update(obj, CurrentUserName);
+                if (!success) 
+                {
+                    this.AddError("Updating<#= Model.Model #>", "There was an error updating your <#= Model.Model #>. If this continues contact support.");
+                    return Redirect(Url.<#= Model.Model #>_Edit(model.Id.Value));
+                }
+            }
+
+            return Redirect(Url.<#= Model.Model #>_Show(obj.Id.Value));
+        }
+
+        [HttpGet]
+        public ActionResult Index()
+        {
+            var model = new List<#= Model.Model #>Model();
+            var objs = <#= Model.Model #>Logic.GetAll();
+            model.<#= Model.Model #>s = ModelConverter.Convert(objs);
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult Show(int id)
+        {
+            var obj = <#= Model.Model #>Logic.Get(id);
+            if (obj == null) 
+            {
+                this.AddError("<#= Model.Model #>NotFound", "That <#= Model.Model #> was not found");
+                return Redirect(Url.<#= Model.Model #>_Index());
+            }
+            var model = ModelConverter.ConvertToShow(obj);
+            return View(model);
+        }
+
+        #region -Constructors
+        [ExcludeFromCodeCoverage]
+        public <#= Model.Model #>Controller() : this(new <#= Model.BLLNamespace #>.Logic.<#= Model.Model #>Logic()) {}
+
+        [ExcludeFromCodeCoverage]
+        public <#= Model.Model #>Controller(I<#= Model.Model #>Logic logic)
+        {
+            <#= Model.Model #>Logic = logic;
+        }
+        #endregion
+
+        #region -Properties
+        private I<#= Model.Model #>Logic <#= Model.Model #>Logic { get; set; }
+        #endregion
+    }
+}

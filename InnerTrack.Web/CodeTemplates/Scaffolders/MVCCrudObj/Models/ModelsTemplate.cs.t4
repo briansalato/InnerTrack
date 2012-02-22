@@ -1,0 +1,38 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace <#= Model.WebNamespace #>.Models
+{
+    public class Show<#= Model.Model #>Model
+    {
+        public int Id { get; set; }
+        /*
+         * Other properties here
+         */
+    }
+
+    public class Edit<#= Model.Model #>Model
+    {
+        public int? Id { get; set; }
+        /*
+         * Other properties here
+         */
+    }
+
+    public class List<#= Model.Model #>Model
+    {
+        public IList<ListItem<#= Model.Model #>Model> <#= Model.Model #>s { get; set; }
+    }
+
+    public class ListItem<#= Model.Model #>Model
+    {
+        public int Id { get; set; }
+        /*
+         * Other properties here
+         */
+    }
+}

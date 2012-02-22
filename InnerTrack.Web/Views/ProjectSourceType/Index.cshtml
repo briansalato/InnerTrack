@@ -1,0 +1,26 @@
+@model ListProjectSourceTypeModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Project Source Configurations</h2>
+
+<a href="@Url.ProjectSourceType_Create()">Add New</a>
+<ul>
+    @foreach(var item in Model.ProjectSourceTypes)
+    {
+        <li>
+            <span>
+                <a href="@Url.ProjectSourceType_Show(item.Id)">@item.Name</a>
+            </span>
+
+            <div>
+                Next Run: 
+                <span class="@(item.Enabled ? "processEnabled" : "processDisabled")">
+                    @(item.Enabled ? item.NextRun.ToString("MMM dd @ hh:mm") : "Disabled")
+                </span>
+            </div>
+        </li>
+    }
+</ul>

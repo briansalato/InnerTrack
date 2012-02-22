@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProjectSourceDb.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ProjectSourceDbStoreContainer">
+          <EntitySet Name="ProjectSource" EntityType="ProjectSourceDb.Store.ProjectSource" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProjectSourceEntry" EntityType="ProjectSourceDb.Store.ProjectSourceEntry" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ProjectSourceType" EntityType="ProjectSourceDb.Store.ProjectSourceType" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_ProjectSource_To_ProjectSourceType" Association="ProjectSourceDb.Store.FK_ProjectSource_To_ProjectSourceType">
+            <End Role="ProjectSourceType" EntitySet="ProjectSourceType" />
+            <End Role="ProjectSource" EntitySet="ProjectSource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProjectSourceEntry_To_ProjectSource" Association="ProjectSourceDb.Store.FK_ProjectSourceEntry_To_ProjectSource">
+            <End Role="ProjectSource" EntitySet="ProjectSource" />
+            <End Role="ProjectSourceEntry" EntitySet="ProjectSourceEntry" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ProjectSource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectSourceTypeId" Type="int" Nullable="false" />
+          <Property Name="Configuration" Type="nvarchar(max)" />
+          <Property Name="CreatedBy" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="UpdatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ProjectSourceEntry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectSourceId" Type="int" Nullable="false" />
+          <Property Name="SourceEntryId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="1000" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="CreatedBy" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="UpdatedOn" Type="datetime" />
+        </EntityType>
+        <EntityType Name="ProjectSourceType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="AssemblyName" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="FullClassName" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="Interval" Type="int" Nullable="false" />
+          <Property Name="LastRun" Type="datetime" />
+          <Property Name="NextRun" Type="datetime" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="UpdatedOn" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_ProjectSource_To_ProjectSourceType">
+          <End Role="ProjectSourceType" Type="ProjectSourceDb.Store.ProjectSourceType" Multiplicity="1" />
+          <End Role="ProjectSource" Type="ProjectSourceDb.Store.ProjectSource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectSourceType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProjectSource">
+              <PropertyRef Name="ProjectSourceTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProjectSourceEntry_To_ProjectSource">
+          <End Role="ProjectSource" Type="ProjectSourceDb.Store.ProjectSource" Multiplicity="1" />
+          <End Role="ProjectSourceEntry" Type="ProjectSourceDb.Store.ProjectSourceEntry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectSource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProjectSourceEntry">
+              <PropertyRef Name="ProjectSourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="ProjectSourceDb" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="ProjectSourceDbContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ProjectSources" EntityType="ProjectSourceDb.ProjectSource" />
+          <EntitySet Name="ProjectSourceEntries" EntityType="ProjectSourceDb.ProjectSourceEntry" />
+          <AssociationSet Name="FK_Event_To_Feed" Association="ProjectSourceDb.FK_Event_To_Feed">
+            <End Role="ProjectSource" EntitySet="ProjectSources" />
+            <End Role="ProjectSourceEntry" EntitySet="ProjectSourceEntries" />
+          </AssociationSet>
+          <EntitySet Name="ProjectSourceTypes" EntityType="ProjectSourceDb.ProjectSourceType" />
+          <AssociationSet Name="FK_ProjectSource_To_ProjectSourceType" Association="ProjectSourceDb.FK_ProjectSource_To_ProjectSourceType">
+            <End Role="ProjectSourceType" EntitySet="ProjectSourceTypes" />
+            <End Role="ProjectSource" EntitySet="ProjectSources" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ProjectSource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int32" Name="ProjectSourceTypeId" Nullable="false" />
+          <Property Type="String" Name="Configuration" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CreatedBy" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreatedOn" Nullable="false" />
+          <Property Type="String" Name="UpdatedBy" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="UpdatedOn" />
+          <NavigationProperty Name="ProjectSourceEntries" Relationship="ProjectSourceDb.FK_Event_To_Feed" FromRole="ProjectSource" ToRole="ProjectSourceEntry" />
+          <NavigationProperty Name="ProjectSourceType" Relationship="ProjectSourceDb.FK_ProjectSource_To_ProjectSourceType" FromRole="ProjectSource" ToRole="ProjectSourceType" />
+        </EntityType>
+        <EntityType Name="ProjectSourceEntry">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ProjectSourceId" Nullable="false" />
+          <Property Type="Int32" Name="SourceEntryId" Nullable="false" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Message" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CreatedBy" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreatedOn" Nullable="false" />
+          <Property Type="String" Name="UpdatedBy" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="UpdatedOn" />
+          <NavigationProperty Name="ProjectSource" Relationship="ProjectSourceDb.FK_Event_To_Feed" FromRole="ProjectSourceEntry" ToRole="ProjectSource" />
+        </EntityType>
+        <Association Name="FK_Event_To_Feed">
+          <End Type="ProjectSourceDb.ProjectSource" Role="ProjectSource" Multiplicity="1" />
+          <End Type="ProjectSourceDb.ProjectSourceEntry" Role="ProjectSourceEntry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectSource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProjectSourceEntry">
+              <PropertyRef Name="ProjectSourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ProjectSourceType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="AssemblyName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="FullClassName" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Interval" Nullable="false" />
+          <Property Type="DateTime" Name="LastRun" />
+          <Property Type="DateTime" Name="NextRun" Nullable="false" />
+          <Property Type="Boolean" Name="Enabled" Nullable="false" />
+          <Property Type="String" Name="CreatedBy" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreatedOn" Nullable="false" />
+          <Property Type="String" Name="UpdatedBy" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="UpdatedOn" />
+          <NavigationProperty Name="ProjectSources" Relationship="ProjectSourceDb.FK_ProjectSource_To_ProjectSourceType" FromRole="ProjectSourceType" ToRole="ProjectSource" />
+        </EntityType>
+        <Association Name="FK_ProjectSource_To_ProjectSourceType">
+          <End Type="ProjectSourceDb.ProjectSourceType" Role="ProjectSourceType" Multiplicity="1" />
+          <End Type="ProjectSourceDb.ProjectSource" Role="ProjectSource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProjectSourceType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProjectSource">
+              <PropertyRef Name="ProjectSourceTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs" Space="C-S">
+        <Alias Key="Model" Value="ProjectSourceDb" />
+        <Alias Key="Target" Value="ProjectSourceDb.Store" />
+        <EntityContainerMapping CdmEntityContainer="ProjectSourceDbContainer" StorageEntityContainer="ProjectSourceDbStoreContainer">
+          <EntitySetMapping Name="ProjectSources">
+            <EntityTypeMapping TypeName="ProjectSourceDb.ProjectSource">
+              <MappingFragment StoreEntitySet="ProjectSource">
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Configuration" ColumnName="Configuration" />
+                <ScalarProperty Name="ProjectSourceTypeId" ColumnName="ProjectSourceTypeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProjectSourceEntries">
+            <EntityTypeMapping TypeName="ProjectSourceDb.ProjectSourceEntry">
+              <MappingFragment StoreEntitySet="ProjectSourceEntry">
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="SourceEntryId" ColumnName="SourceEntryId" />
+                <ScalarProperty Name="ProjectSourceId" ColumnName="ProjectSourceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProjectSourceTypes">
+            <EntityTypeMapping TypeName="ProjectSourceDb.ProjectSourceType">
+              <MappingFragment StoreEntitySet="ProjectSourceType">
+                <ScalarProperty Name="UpdatedOn" ColumnName="UpdatedOn" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="NextRun" ColumnName="NextRun" />
+                <ScalarProperty Name="LastRun" ColumnName="LastRun" />
+                <ScalarProperty Name="Interval" ColumnName="Interval" />
+                <ScalarProperty Name="FullClassName" ColumnName="FullClassName" />
+                <ScalarProperty Name="AssemblyName" ColumnName="AssemblyName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="ProjectSourceDb" >
+        <EntityTypeShape EntityType="ProjectSourceDb.ProjectSource" Width="1.5" PointX="3" PointY="1.25" Height="2.7494921874999996" />
+        <EntityTypeShape EntityType="ProjectSourceDb.ProjectSourceEntry" Width="1.5" PointX="5.25" PointY="1.125" Height="2.9417936197916656" />
+        <AssociationConnector Association="ProjectSourceDb.FK_Event_To_Feed" >
+          <ConnectorPoint PointX="4.5" PointY="2.62474609375" />
+          <ConnectorPoint PointX="5.25" PointY="2.62474609375" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="ProjectSourceDb.ProjectSourceType" Width="1.5" PointX="0.75" PointY="0.875" Height="3.5186979166666656" />
+        <AssociationConnector Association="ProjectSourceDb.FK_ProjectSource_To_ProjectSourceType" >
+          <ConnectorPoint PointX="2.25" PointY="2.62474609375" />
+          <ConnectorPoint PointX="3" PointY="2.62474609375" />
+        </AssociationConnector>
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>InnerTrack - @ViewBag.Title </title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width">
+        <link href="@Url.StyleSheet("reset.css")" rel="stylesheet" type="text/css" />
+        <link href="@Url.StyleSheet("site.less")" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <header>
+            <img src="@Url.Image("logo-color-horizontal.gif")" alt="Site Logo" id="siteLogo" class="stretch" />
+            
+            <div id="navAndSearch">
+                <nav>
+                    <a href="@Url.Project_Index()">Projects</a>
+                </nav>
+                
+                @Html.Partial("Controls/_BasicSearchBox")
+            </div>
+        </header>
+
+        <section>
+            @RenderBody()
+        </section>
+
+        <footer>
+        
+        </footer>
+    
+        @RenderSection("featured", false)
+
+        <script src="@Url.Script("jquery-1.6.2.min.js")" type="text/javascript"></script>
+    </body>
+</html>

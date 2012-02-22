@@ -1,0 +1,36 @@
+﻿@model EditProjectModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) 
+{
+    <div>
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Description)
+        @Html.TextAreaFor(m => m.Description)
+    </div>
+    
+    @Html.LabelFor(m => m.Tags)
+    <ul>
+        @for(int i = 0; i < Model.Tags.Count; i++)
+        {
+            <li id="@("Tags_LI_" + i)">
+                @* TODO put this in a partial view *@
+                <a href="javascript:removeTag()">X</a> @Model.Tags[i].Name
+                <input type="hidden" name="Tags.Id" value="@Model.Tags[i].Id" />
+            </li>
+        }
+    </ul>
+    
+    @Html.HiddenFor(m => m.Id)
+    
+    <input type="submit" value="Save" />
+    <a href="@(Model.Id.HasValue ? Url.Project_Show(Model.Id.Value) : Url.Project_Index())">Back</a>
+}

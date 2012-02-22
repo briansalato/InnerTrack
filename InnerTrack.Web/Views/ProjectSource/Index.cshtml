@@ -1,0 +1,17 @@
+@model ListProjectSourceModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>ProjectSources</h2>
+
+<a href="@Url.ProjectSource_Create()">Add New</a>
+<ul>
+    @foreach(var item in Model.ProjectSources)
+    {
+        <li>
+            <a href="@Url.ProjectSource_Show(item.Id)">@item.TypeName (@item.Configuration)</a>
+        </li>
+    }
+</ul>

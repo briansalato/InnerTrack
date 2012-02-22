@@ -1,0 +1,16 @@
+﻿@model IEnumerable<object>
+
+@if (Model != null
+     && Model.Count() > 0)
+{
+    <ul class="feed">
+        @foreach (var item in Model)
+        {
+            <li>@item.ToString()</li>
+        }
+    </ul>
+}
+else
+{
+    <div>No Items in your Feed</div>
+}

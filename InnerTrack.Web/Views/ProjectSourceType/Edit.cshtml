@@ -1,0 +1,40 @@
+@model EditProjectSourceTypeModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) 
+{
+    <div>
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.AssemblyName)
+        @Html.TextBoxFor(m => m.AssemblyName)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.FullClassName)
+        @Html.TextBoxFor(m => m.FullClassName)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Interval)
+        @Html.TextBoxFor(m => m.Interval)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.ForceRun)
+        @Html.CheckBoxFor(m => m.ForceRun)
+    </div>
+    <div>
+        @Html.LabelFor(m => m.Enabled)
+        @Html.CheckBoxFor(m => m.Enabled)
+    </div>
+    
+    @Html.HiddenFor(m => m.Id)
+    
+    <input type="submit" value="Save" />
+    <a href="@(Model.Id.HasValue ? Url.ProjectSourceType_Show(Model.Id.Value) : Url.ProjectSourceType_Index())">Back</a>
+}

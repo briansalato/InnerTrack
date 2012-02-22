@@ -1,0 +1,15 @@
+﻿@model BasicSearchModel
+
+@{
+    //send it to the Home controller (master search) if a model isnt passed in
+    //TODO : Should this be moved into an action and have this called through Action()
+    //       instead of Partial()?
+    var controller = (Model != null ? Model.ModelName : null) ?? "Home";
+}
+
+@using (Html.BeginForm("BasicSearch", controller, FormMethod.Get, new { @class = "search" }))
+{
+    @Html.TextBoxFor(m => m.Query)
+
+    <input type="submit" value="Search" />
+}

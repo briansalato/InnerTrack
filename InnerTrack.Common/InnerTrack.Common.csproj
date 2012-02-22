@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{743153DC-C13F-4509-8856-C4ED769D0EEE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>InnerTrack.Common</RootNamespace>
+    <AssemblyName>InnerTrack.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Enumerations\EnumerationExtension.cs" />
+    <Compile Include="Enumerations\FeedType.cs" />
+    <Compile Include="Filters\IdFilter.cs" />
+    <Compile Include="Filters\FeedFilter.cs" />
+    <Compile Include="Filters\ProjectFilter.cs" />
+    <Compile Include="Filters\ProjectSourceTypeFilter.cs" />
+    <Compile Include="Filters\ProjectSourceFilter.cs" />
+    <Compile Include="Filters\TagFilter.cs" />
+    <Compile Include="Interfaces\Database\IFeedIO.cs" />
+    <Compile Include="Interfaces\Database\IInnerTrackRepository.cs" />
+    <Compile Include="Interfaces\Data\IProjectSource.cs" />
+    <Compile Include="Interfaces\Logic\IFeedLogic.cs" />
+    <Compile Include="Interfaces\Logic\IProjectLogic.cs" />
+    <Compile Include="Interfaces\Logic\IProjectSourceTypeLogic.cs" />
+    <Compile Include="Interfaces\Logic\IProjectSourceLogic.cs" />
+    <Compile Include="Interfaces\Logic\ITagLogic.cs" />
+    <Compile Include="Objs\Data\SourceEntryObj.cs" />
+    <Compile Include="Objs\EventObj.cs" />
+    <Compile Include="Objs\FeedTypeObj.cs" />
+    <Compile Include="Objs\IdObject.cs" />
+    <Compile Include="Objs\FeedObj.cs" />
+    <Compile Include="Objs\ProjectObj.cs" />
+    <Compile Include="Objs\ProjectSourceTypeObj.cs" />
+    <Compile Include="Objs\ProjectSourceObj.cs" />
+    <Compile Include="Objs\SearchResult.cs" />
+    <Compile Include="Objs\TagObj.cs" />
+    <Compile Include="Objs\UserObj.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,17 @@
+@model ShowProjectSourceModel
+
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>@Model.Id</h2>
+
+<a href="@Url.ProjectSource_Edit(Model.Id)">Edit</a>
+
+@Html.LabelFor(m => m.TypeName)
+@Html.DisplayFor(m => m.TypeName)
+
+@Html.LabelFor(m => m.Configuration)
+@Html.DisplayFor(m => m.Configuration)
+
+<a href="@Url.ProjectSource_Index()">ProjectSource List</a>

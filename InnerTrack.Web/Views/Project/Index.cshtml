@@ -1,0 +1,23 @@
+﻿@model ListProjectModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Projects</h2>
+
+@{ 
+    var searchModel = new BasicSearchModel();
+    searchModel.ModelName = "Project";
+}
+@Html.Partial("Controls/_BasicSearchBox", searchModel)
+<a href="@Url.Project_Create()">Add New</a>
+<h3>My Projects</h3>
+<ul>
+    @foreach (var project in Model.Projects)
+    {
+        <li>
+            <a href="@Url.Project_Show(project.Id)">@project.Name</a>
+        </li>
+    }
+</ul>

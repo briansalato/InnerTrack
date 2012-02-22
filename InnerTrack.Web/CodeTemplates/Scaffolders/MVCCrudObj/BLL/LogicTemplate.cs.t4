@@ -1,0 +1,59 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Text;
+using <#= Model.CommonNamespace #>.Interfaces.Logic;
+using <#= Model.CommonNamespace #>.Objs;
+using <#= Model.CommonNamespace #>.Interfaces.Database;
+using <#= Model.CommonNamespace #>.Filters;
+using <#= Model.DALNamespace #>;
+
+namespace <#= Model.BLLNamespace #>.Logic
+{
+    public class <#= Model.Model #>Logic : BaseLogic, I<#= Model.Model #>Logic
+    {
+        public <#= Model.Model #>Obj Get(int id)
+        {
+            var filter = new <#= Model.Model #>Filter
+            {
+                Id = id
+            };
+            
+            var obj = Repository.Get<#= Model.Model #>s(filter).SingleOrDefault();
+
+            /* Any Complex Properties that need to be filled in through more DB calls
+            if (obj != null)
+            {
+                
+            }
+            */
+
+            return obj;
+        }
+
+        public IList<<#= Model.Model #>Obj> GetAll()
+        {
+            var filter = new <#= Model.Model #>Filter();
+            return Repository.Get<#= Model.Model #>s(filter);
+        }
+
+        public int Create(<#= Model.Model #>Obj obj, string username)
+        {
+            return Repository.Create<#= Model.Model #>(obj, username);
+        }
+
+        public bool Update(<#= Model.Model #>Obj obj, string username)
+        {
+            return Repository.Update<#= Model.Model #>(obj, username);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public <#= Model.Model #>Logic() : base(new <#= Model.ProjectName #>Repository()) { }
+
+        [ExcludeFromCodeCoverage]
+        public <#= Model.Model #>Logic(I<#= Model.ProjectName #>Repository repository) :base(repository) {}
+    }
+}

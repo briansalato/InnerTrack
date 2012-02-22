@@ -1,0 +1,36 @@
+@model ShowProjectSourceTypeModel
+
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>@Model.Name</h2>
+
+<a href="@Url.ProjectSourceType_Edit(Model.Id)">Edit</a>
+<div>
+    @Html.LabelFor(m => m.AssemblyName)
+    @Html.DisplayFor(m => m.AssemblyName)
+</div>
+<div>
+<div>
+    @Html.LabelFor(m => m.FullClassName)
+    @Html.DisplayFor(m => m.FullClassName)
+</div>
+<div>
+    @Html.LabelFor(m => m.Interval)
+    @Html.DisplayFor(m => m.Interval)
+</div>
+<div>
+    @Html.LabelFor(m => m.NextRun)
+    @Html.DisplayFor(m => m.NextRun)
+</div>
+<div>
+    @Html.LabelFor(m => m.LastRun)
+    @Html.DisplayFor(m => m.LastRun)
+</div>
+<div>
+    @Html.LabelFor(m => m.Enabled)
+    @Html.DisplayFor(m => m.Enabled)
+</div>
+
+<a href="@Url.ProjectSourceType_Index()">ProjectSourceConfig List</a>

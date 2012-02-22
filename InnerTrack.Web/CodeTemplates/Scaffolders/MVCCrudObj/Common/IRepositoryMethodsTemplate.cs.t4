@@ -1,0 +1,24 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+#region -<#= Model.Model #>
+/// <summary>
+/// Returns a list of objects from the <#= Model.Model #> table
+/// </summary>
+/// <param name="filter">This will filter the query based on any property that is not null</param>
+/// <returns>Returns the list of <#= Model.Model #>s found, or a 0 length list if none were found</returns>
+IList<<#= Model.Model #>Obj> Get<#= Model.Model #>s(<#= Model.Model #>Filter filter);
+
+/// <summary>
+/// Adds a new entry to the <#= Model.Model #> table
+/// </summary>
+/// <param name="obj">The item to add</param>
+/// <returns>The Id of the created item or -1 if no item was created</returns>
+int Create<#= Model.Model #>(<#= Model.Model #>Obj obj, string username);
+
+/// <summary>
+/// Updates an entry in the <#= Model.Model #> table
+/// </summary>
+/// <param name="obj">The item to update. It will be updated based on it's Id</param>
+/// <returns>True if the Id was found and the entry updated, or false if the Id was not found or the entry not able to be updated</returns>
+bool Update<#= Model.Model #>(<#= Model.Model #>Obj obj, string username);
+#endregion

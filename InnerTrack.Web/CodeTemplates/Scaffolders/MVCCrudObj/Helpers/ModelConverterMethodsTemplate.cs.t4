@@ -1,0 +1,58 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+#region -<#= Model.Model #> Models
+internal static Edit<#= Model.Model #>Model ConvertToEdit(<#= Model.Model #>Obj obj)
+{
+    return new Edit<#= Model.Model #>Model
+    {
+        Id = obj.Id
+        /*
+         * Copy other properties here
+         */
+    };
+}
+
+internal static Show<#= Model.Model #>Model ConvertToShow(<#= Model.Model #>Obj obj)
+{
+    var model = new Show<#= Model.Model #>Model
+    {
+        Id = obj.Id.Value
+        /*
+         * Copy other properties here
+         */
+    };
+
+    return model;
+}
+
+internal static IList<ListItem<#= Model.Model #>Model> Convert(IList<<#= Model.Model #>Obj> objs)
+{
+    var model = new List<ListItem<#= Model.Model #>Model>();
+    if (objs != null)
+    {
+        foreach (var obj in objs)
+        {
+            model.Add(new ListItem<#= Model.Model #>Model()
+            {
+                Id = obj.Id.Value
+                /*
+                 * Copy other properties here
+                 */
+            });
+        }
+    }
+
+    return model;
+}
+
+internal static <#= Model.Model #>Obj Convert(Edit<#= Model.Model #>Model model)
+{
+    return new <#= Model.Model #>Obj
+    {
+        Id = model.Id
+        /*
+         * Copy other properties here
+         */
+    };
+}
+#endregion

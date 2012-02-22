@@ -1,0 +1,18 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cshtml" #>
+@model Edit<#= Model.Model #>Model
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm()) 
+{
+    
+    @Html.HiddenFor(m => m.Id)
+    
+    <input type="submit" value="Save" />
+    <a href="@(Model.Id.HasValue ? Url.<#= Model.Model #>_Show(Model.Id.Value) : Url.<#= Model.Model #>_Index())">Back</a>
+}

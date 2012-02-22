@@ -1,0 +1,106 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+#region -<#= Model.Model #>s
+public IList<<#= Model.Model #>Obj> Get<#= Model.Model #>s(<#= Model.Model #>Filter filter)
+{
+    using (var db = Get<#= Model.ProjectName #>Entities())
+    {
+        var items = db.<#= Model.Model #>s.AsQueryable();
+
+        if (filter.Id.HasValue)
+        {
+            items = items.Where(i => i.Id == filter.Id.Value);
+        }
+
+        /*
+         * Any Addtional Filtering is done here based on if properties in the filter are not null
+         */
+
+        return ToObjs(items);
+    }
+}
+
+public int Create<#= Model.Model #>(<#= Model.Model #>Obj obj, string username)
+{
+    using (var db = Get<#= Model.ProjectName #>Entities())
+    {
+        var dbItem = ToDbItem(obj);
+        dbItem.CreatedBy = username;
+        dbItem.CreatedOn = DateTime.Now;
+
+        db.<#= Model.Model #>s.AddObject(dbItem);
+
+        db.SaveChanges();
+
+        return dbItem.Id;
+    }
+}
+
+public bool Update<#= Model.Model #>(<#= Model.Model #>Obj obj, string username)
+{
+    if (!obj.Id.HasValue)
+    {
+        return false;
+    }
+    using (var db = Get<#= Model.ProjectName #>Entities())
+    {
+        var dbItem = db.<#= Model.Model #>s.SingleOrDefault(i => i.Id == obj.Id.Value);
+        if (dbItem == null)
+        {
+            return false;
+        }
+
+        /*
+         * Update the dbItem's properties from the obj's properties here
+         */ 
+        dbItem.UpdatedBy = username;
+        dbItem.UpdatedOn = DateTime.Now;
+        db.SaveChanges();
+
+        return true;
+    }
+}
+#endregion
+
+#region -Converters
+private IList<<#= Model.Model #>Obj> ToObjs(IEnumerable<<#= Model.Model #>> items)
+{
+    var objs = new List<<#= Model.Model #>Obj>();
+    foreach (var item in items)
+    {
+        objs.Add(ToObj(item));
+    }
+
+    return objs;
+}
+
+private <#= Model.Model #>Obj ToObj(<#= Model.Model #> item)
+{
+    var obj = new <#= Model.Model #>Obj
+    {
+        Id = item.Id
+        /*
+         * Copy item's property to the new obj here
+         */
+    };
+
+    return obj;
+}
+
+private <#= Model.Model #> ToDbItem(<#= Model.Model #>Obj obj)
+{
+    var dbItem = new <#= Model.Model #>
+    {
+        /*
+         * Copy obj's property to the new db item here
+         */
+    };
+
+    if (obj.Id.HasValue)
+    {
+        dbItem.Id = obj.Id.Value;
+    }
+
+    return dbItem;
+}
+#endregion

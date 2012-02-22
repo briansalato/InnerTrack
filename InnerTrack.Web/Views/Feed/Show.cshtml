@@ -1,0 +1,14 @@
+﻿@model ShowFeedModel
+
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>@Model.Type</h2>
+
+<ul>
+    @foreach (var e in Model.Events) 
+    { 
+        <li>@e.ToString()</li>
+    }
+</ul>

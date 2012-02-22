@@ -1,0 +1,21 @@
+@model EditProjectSourceModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(m => m.TypeId)
+    @Html.DropDownListFor(m => m.TypeId, Model.AvailableTypes, "Select One")
+
+    @Html.LabelFor(m => m.Configuration)
+    @Html.TextBoxFor(m => m.Configuration)
+    
+    @Html.HiddenFor(m => m.Id)
+    
+    <input type="submit" value="Save" />
+    <a href="@(Model.Id.HasValue ? Url.ProjectSource_Show(Model.Id.Value) : Url.ProjectSource_Index())">Back</a>
+}

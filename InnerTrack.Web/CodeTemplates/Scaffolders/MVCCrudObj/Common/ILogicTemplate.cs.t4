@@ -1,0 +1,44 @@
+<#@ Template Language="C#" HostSpecific="True" Inherits="DynamicTransform" #>
+<#@ Output Extension="cs" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using <#= Model.CommonNamespace #>.Objs;
+
+namespace <#= Model.CommonNamespace #>.Interfaces.Logic
+{
+    public interface I<#= Model.Model #>Logic
+    {
+        /// <summary>
+        /// Returns a single <#= Model.Model #>
+        /// </summary>
+        /// <param name="id">The id of the <#= Model.Model #> to find</param>
+        /// <returns>A <#= Model.Model #> or null if no <#= Model.Model #> has that Id</returns>
+        <#= Model.Model #>Obj Get(int id);
+
+        /// <summary>
+        /// Adds a new entry to the <#= Model.Model #> table
+        /// </summary>
+        /// <param name="obj">The item to add</param>
+        /// <param name="username">The username of who is taking this action</param>
+        /// <returns>
+        /// The Id of the created item or -1 if no item was created
+        /// </returns>
+        int Create(<#= Model.Model #>Obj obj, string username);
+
+        /// <summary>
+        /// Updates an entry in the <#= Model.Model #> table
+        /// </summary>
+        /// <param name="obj">The item to update. It will be updated based on it's Id</param>
+        /// <param name="username">The username of who is taking this action</param>
+        /// <returns>True if the Id was found and the entry updated, or false if the Id was not found or the entry not able to be updated</returns>
+        bool Update(<#= Model.Model #>Obj obj, string username);
+
+        /// <summary>
+        /// Get all <#= Model.Model #>s in the repository
+        /// </summary>
+        /// <returns>This will return a blank list if no <#= Model.Model #>s are found, or the list of <#= Model.Model #>s if there are some</returns>
+        IList<<#= Model.Model #>Obj> GetAll();
+    }
+}

@@ -1,0 +1,40 @@
+﻿@model BasicSearchModel
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+@Html.Partial("Controls/_BasicSearchBox", Model)
+
+<ul class="searchResults">
+    @foreach (var result in Model.Results)
+    { 
+        <li>
+            <div>@Html.ActionLink(result.Title, "Show", Model.ModelName)</div>
+            <div>@result.Description</div>
+        </li>
+    }
+</ul>
+
+@if (Model.HasPriorResults)
+{
+    @Html.ActionLink("Previous", "BasicSearch", Model.ModelName, new { currentPage = Model.CurrentPage - 1,
+                                                                       pageSize = Model.PageSize,
+                                                                       query = Model.Query,
+                                                                       modelName = Model.ModelName }, null)
+}
+else
+{
+    <span>Previous</span>
+}
+@if (Model.HasMoreResults)
+{
+    @Html.ActionLink("Next", "BasicSearch", Model.ModelName, new { currentPage = Model.CurrentPage + 1,
+                                                                   pageSize = Model.PageSize,
+                                                                   query = Model.Query,
+                                                                   modelName = Model.ModelName }, null)
+}
+else
+{
+    <span>Next</span>
+}

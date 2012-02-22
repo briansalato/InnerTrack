@@ -1,0 +1,19 @@
+﻿@model EditFeedModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+@using (Html.BeginForm()) 
+{ 
+    <div>
+        @Html.LabelFor(m => m.Type)
+        @Html.DropDownListFor(m => m.Type, Model.AvailableTypes)
+    </div>
+    
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.ProjectId)
+    
+    <input type="submit" value="Save" />
+}
