@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using InnerTrack.Common.Enumerations;
+using System.ComponentModel.DataAnnotations;
 
 namespace InnerTrack.Common.Objs
 {
-    public class FeedObj : IdObject
+    public class FeedObj : DbObject
     {
-        public FeedTypeObj Type { get; set; }
-        public IList<EventObj> Events { get; set; }
-        public IList<ProjectObj> Projects { get; set; }
+        [Required]
+        public virtual FeedTypeObj Type { get; set; }
+        public virtual IList<EventObj> Events { get; set; }
+        public virtual IList<ProjectObj> Projects { get; set; }
     }
 }

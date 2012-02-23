@@ -2,13 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace InnerTrack.Common.Objs
 {
-    public abstract class IdObject
+    public abstract class DbObject
     {
+        #region -Properties
+        [Key]
         public int? Id { get; set; }
 
+        [Required]
+        [StringLength(100)]
+        public string CreatedBy { get; set; }
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
+
+        [StringLength(100)]
+        public string UpdatedBy { get; set; }
+
+        public DateTime? UpdatedOn { get; set; }
+        #endregion
+
+        #region -Methods
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -17,7 +34,7 @@ namespace InnerTrack.Common.Objs
             if (GetType() != obj.GetType())
                 return false;
 
-            var castedObj = obj as IdObject;
+            var castedObj = obj as DbObject;
 
             return Id.HasValue
                    && Id == castedObj.Id;
@@ -29,7 +46,7 @@ namespace InnerTrack.Common.Objs
             return Id.HasValue ? GetType().GetHashCode() + Id.Value : base.GetHashCode();
         }
 
-        public static bool operator ==(IdObject a, IdObject b)
+        public static bool operator ==(DbObject a, DbObject b)
         {    // If both are null, or both are same instance, return true.
             if (System.Object.ReferenceEquals(a, b))
             {
@@ -46,9 +63,10 @@ namespace InnerTrack.Common.Objs
                    && a.Id == b.Id;
         }
 
-        public static bool operator !=(IdObject a, IdObject b)
+        public static bool operator !=(DbObject a, DbObject b)
         {
             return !(a == b);
         }
+        #endregion
     }
 }

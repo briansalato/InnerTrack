@@ -5,12 +5,12 @@
 
 <div class="half">
     <div class="leftWrapper">
-        @Html.Partial("Controls/_ProjectStatusList", Model.ProjectStatuses)
+        @{ Html.RenderPartial("Controls/_ProjectStatusList", Model.ProjectStatuses); }
     </div>
 </div>
 
 <div class="half">
     <div class="rightWrapper">
-        @Html.Partial("Controls/_EventList", Model.FeedEvents)
+        @{ Html.RenderPartial("Controls/_EventList", Model.FeedEvents); }
     </div>
 </div>

@@ -3,3 +3,5 @@ bin/
 obj/
 /TestResults
 *.suo
+*.user
+/InnerTrack.Database

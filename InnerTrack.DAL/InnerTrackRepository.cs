@@ -15,7 +15,7 @@ namespace InnerTrack.DAL
         #region -Projects
         public IList<ProjectObj> GetProjects(ProjectFilter filter)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
                 var items = db.Projects.AsQueryable();
 
@@ -26,7 +26,7 @@ namespace InnerTrack.DAL
 
                 if (!string.IsNullOrEmpty(filter.OwnersUserName))
                 {
-                    items = items.Where(i => i.User_Project.Any(up => up.User.Email == filter.OwnersUserName));
+                    items = items.Where(i => i.Members.Any(m => m.Email == filter.OwnersUserName));
                 }
 
                 if (filter.QueryNames != null)
@@ -49,49 +49,44 @@ namespace InnerTrack.DAL
                     items = items.Take(filter.MaxResults.Value);
                 }
 
-                return ToObjs(items);
+                return items.ToList();
             }
         }
 
-        public int CreateProject(ProjectObj proj, string username)
+        public int CreateProject(ProjectObj item, string username)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
-                var dbItem = ToDbItem(proj);
                 var user = GetOrCreateCreateUser(username, db);
-                dbItem.User_Project.Add(new User_Project()
-                {
-                    UserId = user.Id,
-                    CreatedBy = username,
-                    CreatedOn = DateTime.Now
-                });
-                dbItem.CreatedBy = username;
-                dbItem.CreatedOn = DateTime.Now;
+                item.Members = new List<UserObj>();
+                item.Members.Add(user);
+                item.CreatedBy = username;
+                item.CreatedOn = DateTime.Now;
 
-                db.Projects.AddObject(dbItem);
+                db.Projects.Add(item);
 
                 db.SaveChanges();
 
-                return dbItem.Id;
+                return item.Id.Value;
             }
         }
 
-        public bool UpdateProject(ProjectObj proj, string username)
+        public bool UpdateProject(ProjectObj item, string username)
         {
-            if (!proj.Id.HasValue)
+            if (!item.Id.HasValue)
             {
                 return false;
             }
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
-                var dbItem = db.Projects.SingleOrDefault(i => i.Id == proj.Id.Value);
+                var dbItem = db.Projects.SingleOrDefault(i => i.Id == item.Id.Value);
                 if (dbItem == null)
                 {
                     return false;
                 }
 
-                dbItem.Name = proj.Name;
-                dbItem.Description = proj.Description;
+                dbItem.Name = item.Name;
+                dbItem.Description = item.Description;
                 dbItem.UpdatedBy = username;
                 dbItem.UpdatedOn = DateTime.Now;
                 db.SaveChanges();
@@ -99,54 +94,12 @@ namespace InnerTrack.DAL
                 return true;
             }
         }
-
-        #region -Converters
-
-        private IList<ProjectObj> ToObjs(IEnumerable<Project> items)
-        {
-            var objs = new List<ProjectObj>();
-            foreach (var item in items)
-            {
-                objs.Add(ToObj(item));
-            }
-
-            return objs;
-        }
-
-        private ProjectObj ToObj(Project item)
-        {
-            var obj = new ProjectObj
-            {
-                Id = item.Id,
-                Name = item.Name,
-                Description = item.Description
-            };
-
-            return obj;
-        }
-
-        private Project ToDbItem(ProjectObj obj)
-        {
-            var dbItem = new Project
-            {
-                Name = obj.Name,
-                Description = obj.Description
-            };
-
-            if (obj.Id.HasValue)
-            {
-                dbItem.Id = obj.Id.Value;
-            }
-
-            return dbItem;
-        }
-        #endregion
         #endregion
 
         #region -Feeds
         public IList<FeedObj> GetFeeds(FeedFilter filter)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
                 var items = db.Feeds.AsQueryable();
 
@@ -157,86 +110,35 @@ namespace InnerTrack.DAL
 
                 if (filter.ProjectId.HasValue)
                 {
-                    items = items.Where(i => i.Project_Feed.Any(pf => pf.ProjectId == filter.ProjectId.Value));
+                    items = items.Where(i => i.Projects.Any(p => p.Id == filter.ProjectId.Value));
                 }
 
-                return ToObjs(items);
+                return items.ToList();
             }
         }
 
-        public int CreateFeed(FeedObj feed, string username)
+        public int CreateFeed(FeedObj item, string username)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
                 var now = DateTime.Now;
 
-                var dbItem = ToDbItem(feed);
-                dbItem.CreatedBy = username;
-                dbItem.CreatedOn = now;
+                item.CreatedBy = username;
+                item.CreatedOn = now;
 
-                db.Feeds.AddObject(dbItem);
-
-                foreach (var proj in feed.Projects)
-                {
-                    var dbProjFeed = new Project_Feed()
-                    {
-                        FeedId = dbItem.Id,
-                        ProjectId = proj.Id.Value
-                    };
-                    dbProjFeed.CreatedBy = username;
-                    dbProjFeed.CreatedOn = now;
-                    db.Project_Feed.AddObject(dbProjFeed);
-                }
+                db.Feeds.Add(item);
 
                 db.SaveChanges();
 
-                return dbItem.Id;
+                return item.Id.Value;
             }
         }
-
-        #region -Converters
-        private IList<FeedObj> ToObjs(IEnumerable<Feed> items)
-        {
-            var objs = new List<FeedObj>();
-            foreach (var item in items)
-            {
-                objs.Add(ToObj(item));
-            }
-
-            return objs;
-        }
-
-        private FeedObj ToObj(Feed item)
-        {
-            var obj = new FeedObj
-            {
-                Id = item.Id,
-                Type = ToObj(item.FeedType)
-            };
-
-            return obj;
-        }
-
-        private Feed ToDbItem(FeedObj obj)
-        {
-            var dbItem = new Feed
-            {
-            };
-
-            if (obj.Id.HasValue)
-            {
-                dbItem.Id = obj.Id.Value;
-            }
-
-            return dbItem;
-        }
-        #endregion
         #endregion
 
         #region -Tags
         public IList<TagObj> GetTags(TagFilter filter)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
                 var items = db.Tags.AsQueryable();
 
@@ -247,43 +149,18 @@ namespace InnerTrack.DAL
 
                 if (filter.ProjectId.HasValue)
                 {
-                    items = items.Where(i => i.Project_Tag.Any(pf => pf.ProjectId == filter.ProjectId.Value));
+                    items = items.Where(i => db.Projects.Where(p => p.Id == filter.ProjectId).Any(p => p.Tags.Contains(i)));
                 }
 
-                return ToObjs(items);
+                return items.ToList();
             }
         }
-
-        #region -Converters
-
-        private IList<TagObj> ToObjs(IEnumerable<Tag> items)
-        {
-            var objs = new List<TagObj>();
-            foreach (var item in items)
-            {
-                objs.Add(ToObj(item));
-            }
-
-            return objs;
-        }
-
-        private TagObj ToObj(Tag item)
-        {
-            var obj = new TagObj
-            {
-                Id = item.Id,
-                Name = item.Name
-            };
-
-            return obj;
-        }
-        #endregion
         #endregion
 
         #region -ProjectSourceConfigs
         public IList<ProjectSourceTypeObj> GetProjectSourceTypes(ProjectSourceTypeFilter filter)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
                 var items = db.ProjectSourceTypes.AsQueryable();
 
@@ -296,53 +173,52 @@ namespace InnerTrack.DAL
                  * Any Addtional Filtering is done here based on if properties in the filter are not null
                  */
 
-                return ToObjs(items);
+                return items.ToList();
             }
         }
 
-        public int CreateProjectSourceType(ProjectSourceTypeObj obj, string username)
+        public int CreateProjectSourceType(ProjectSourceTypeObj item, string username)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
-                var dbItem = ToDbItem(obj);
-                dbItem.CreatedBy = username;
-                dbItem.CreatedOn = DateTime.Now;
+                item.CreatedBy = username;
+                item.CreatedOn = DateTime.Now;
 
-                db.ProjectSourceTypes.AddObject(dbItem);
+                db.ProjectSourceTypes.Add(item);
 
                 db.SaveChanges();
 
-                return dbItem.Id;
+                return item.Id.Value;
             }
         }
 
-        public bool UpdateProjectSourceType(ProjectSourceTypeObj obj, string username)
+        public bool UpdateProjectSourceType(ProjectSourceTypeObj item, string username)
         {
-            if (!obj.Id.HasValue)
+            if (!item.Id.HasValue)
             {
                 return false;
             }
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
-                var dbItem = db.ProjectSourceTypes.SingleOrDefault(i => i.Id == obj.Id.Value);
+                var dbItem = db.ProjectSourceTypes.SingleOrDefault(i => i.Id == item.Id.Value);
                 if (dbItem == null)
                 {
                     return false;
                 }
 
-                dbItem.Name = obj.Name;
-                dbItem.FullClassName = obj.FullClassName;
+                dbItem.Name = item.Name;
+                dbItem.FullClassName = item.FullClassName;
 
-                if (obj.NextRun.HasValue)
+                if (item.NextRun.HasValue)
                 {
-                    dbItem.NextRun = obj.NextRun.Value < SqlDateTime.MinValue.Value ? SqlDateTime.MinValue.Value : obj.NextRun.Value;
+                    dbItem.NextRun = item.NextRun.Value < SqlDateTime.MinValue.Value ? SqlDateTime.MinValue.Value : item.NextRun.Value;
                 }
-                if (obj.LastRun.HasValue)
+                if (item.LastRun.HasValue)
                 {
-                    dbItem.LastRun = obj.LastRun.Value;
+                    dbItem.LastRun = item.LastRun.Value;
                 }
-                dbItem.Enabled = obj.Enabled;
-                dbItem.Interval = obj.Interval;
+                dbItem.Enabled = item.Enabled;
+                dbItem.Interval = item.Interval;
                 dbItem.UpdatedBy = username;
                 dbItem.UpdatedOn = DateTime.Now;
                 db.SaveChanges();
@@ -351,61 +227,12 @@ namespace InnerTrack.DAL
             }
         }
 
-        #region -Converters
-        private IList<ProjectSourceTypeObj> ToObjs(IEnumerable<ProjectSourceType> items)
-        {
-            var objs = new List<ProjectSourceTypeObj>();
-            foreach (var item in items)
-            {
-                objs.Add(ToObj(item));
-            }
-
-            return objs;
-        }
-
-        private ProjectSourceTypeObj ToObj(ProjectSourceType item)
-        {
-            var obj = new ProjectSourceTypeObj
-            {
-                Id = item.Id,
-                Name = item.Name,
-                FullClassName = item.FullClassName,
-                Interval = item.Interval,
-                LastRun = item.LastRun,
-                NextRun = item.NextRun,
-                Enabled = item.Enabled
-            };
-
-            return obj;
-        }
-
-        private ProjectSourceType ToDbItem(ProjectSourceTypeObj obj)
-        {
-            var dbItem = new ProjectSourceType
-            {
-                Name = obj.Name,
-                FullClassName = obj.FullClassName,
-                Interval = obj.Interval,
-                LastRun = obj.LastRun,
-                NextRun = obj.NextRun.Value,
-                Enabled = obj.Enabled
-            };
-
-            if (obj.Id.HasValue)
-            {
-                dbItem.Id = obj.Id.Value;
-            }
-
-            return dbItem;
-        }
-        #endregion
-
         #endregion
 
         #region -ProjectSources
         public IList<ProjectSourceObj> GetProjectSources(ProjectSourceFilter filter)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
                 var items = db.ProjectSources.AsQueryable();
 
@@ -418,35 +245,34 @@ namespace InnerTrack.DAL
                  * Any Addtional Filtering is done here based on if properties in the filter are not null
                  */
 
-                return ToObjs(items);
+                return items.ToList();
             }
         }
 
-        public int CreateProjectSource(ProjectSourceObj obj, string username)
+        public int CreateProjectSource(ProjectSourceObj item, string username)
         {
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
-                var dbItem = ToDbItem(obj);
-                dbItem.CreatedBy = username;
-                dbItem.CreatedOn = DateTime.Now;
+                item.CreatedBy = username;
+                item.CreatedOn = DateTime.Now;
 
-                db.ProjectSources.AddObject(dbItem);
+                db.ProjectSources.Add(item);
 
                 db.SaveChanges();
 
-                return dbItem.Id;
+                return item.Id.Value;
             }
         }
 
-        public bool UpdateProjectSource(ProjectSourceObj obj, string username)
+        public bool UpdateProjectSource(ProjectSourceObj item, string username)
         {
-            if (!obj.Id.HasValue)
+            if (!item.Id.HasValue)
             {
                 return false;
             }
-            using (var db = GetInnerTrackEntities())
+            using (var db = GetInnerTrackContext())
             {
-                var dbItem = db.ProjectSources.SingleOrDefault(i => i.Id == obj.Id.Value);
+                var dbItem = db.ProjectSources.SingleOrDefault(i => i.Id == item.Id.Value);
                 if (dbItem == null)
                 {
                     return false;
@@ -459,58 +285,22 @@ namespace InnerTrack.DAL
                 return true;
             }
         }
-
-        #region -Converters
-        private IList<ProjectSourceObj> ToObjs(IEnumerable<ProjectSource> items)
-        {
-            var objs = new List<ProjectSourceObj>();
-            foreach (var item in items)
-            {
-                objs.Add(ToObj(item));
-            }
-
-            return objs;
-        }
-
-        private ProjectSourceObj ToObj(ProjectSource item)
-        {
-            var obj = new ProjectSourceObj
-            {
-                Id = item.Id
-            };
-
-            return obj;
-        }
-
-        private ProjectSource ToDbItem(ProjectSourceObj obj)
-        {
-            var dbItem = new ProjectSource
-            {
-            };
-
-            if (obj.Id.HasValue)
-            {
-                dbItem.Id = obj.Id.Value;
-            }
-
-            return dbItem;
-        }
-        #endregion
         #endregion
 
         #region -Users
-        private User GetOrCreateCreateUser(string username, InnerTrackEntities db)
+        private UserObj GetOrCreateCreateUser(string username, InnerTrackContext db)
         {
-            User dbItem = db.Users.FirstOrDefault(u => u.Username == username);
+            UserObj dbItem = db.Users.FirstOrDefault(u => u.Email == username);
             if (dbItem == null)
             {
-                dbItem = new User()
+                dbItem = new UserObj()
                 {
                     Email = username,
-                    Username = username
+                    CreatedBy = "system",
+                    CreatedOn = DateTime.Now
                 };
 
-                db.Users.AddObject(dbItem);
+                db.Users.Add(dbItem);
 
                 db.SaveChanges();
             }
@@ -519,24 +309,9 @@ namespace InnerTrack.DAL
         }
         #endregion
 
-        #region -Converters
-
-        private FeedTypeObj ToObj(FeedType item)
+        private InnerTrackContext GetInnerTrackContext()
         {
-            var obj = new FeedTypeObj
-            {
-                Id = item.Id,
-                Name = item.Name,
-                AssociatedClass = item.AssociatedClass
-            };
-
-            return obj;
-        }
-        #endregion
-
-        private InnerTrackEntities GetInnerTrackEntities()
-        {
-            return new InnerTrackEntities();
+            return new InnerTrackContext("InnerTrackDb");
         }
     }
 }

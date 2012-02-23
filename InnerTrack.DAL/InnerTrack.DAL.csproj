@@ -31,7 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.3.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
@@ -43,22 +47,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InnerTrackDb.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>InnerTrackDb.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="InnerTrackContext.cs" />
     <Compile Include="InnerTrackRepository.cs" />
+    <Compile Include="Migrations\201202231540053_InitialLoad.cs" />
+    <Compile Include="Migrations\201202231540053_InitialLoad.Designer.cs">
+      <DependentUpon>201202231540053_InitialLoad.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201202231612396_AddedMaxLengths.cs" />
+    <Compile Include="Migrations\201202231612396_AddedMaxLengths.Designer.cs">
+      <DependentUpon>201202231612396_AddedMaxLengths.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="InnerTrackDb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>InnerTrackDb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InnerTrack.Common\InnerTrack.Common.csproj">

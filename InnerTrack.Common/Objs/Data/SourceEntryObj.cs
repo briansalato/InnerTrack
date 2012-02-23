@@ -5,7 +5,7 @@ using System.Text;
 
 namespace InnerTrack.Common.Objs.Data
 {
-    public class SourceEntryObj : IdObject
+    public class SourceEntryObj : DbObject
     {
         public string Title { get; set; }
         public string Message { get; set; }

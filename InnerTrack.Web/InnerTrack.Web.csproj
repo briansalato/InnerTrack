@@ -37,8 +37,9 @@
     <Reference Include="dotless.Core">
       <HintPath>..\packages\dotless.1.2.2.0\lib\dotless.Core.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.4.1.10715.0\lib\EntityFramework.dll</HintPath>
+    <Reference Include="EntityFramework, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EntityFramework.4.3.0\lib\net40\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -106,6 +107,7 @@
     <Compile Include="Helpers\FlashHelper.cs" />
     <Compile Include="Helpers\ModelConverter.cs" />
     <Compile Include="Helpers\UrlHelperExtension.cs" />
+    <Compile Include="Models\DashboardModels.cs" />
     <Compile Include="Models\EventModels.cs" />
     <Compile Include="Models\FeedModels.cs" />
     <Compile Include="Models\ProjectModels.cs" />
@@ -222,9 +224,9 @@
     <Content Include="Views\ProjectSource\Edit.cshtml" />
     <Content Include="Views\ProjectSource\Index.cshtml" />
     <Content Include="Views\ProjectSource\Show.cshtml" />
-    <Content Include="Views\Shared\Controls\_Feed.cshtml" />
     <Content Include="Views\Shared\Controls\_ProjectStatusList.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\Controls\_EventList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

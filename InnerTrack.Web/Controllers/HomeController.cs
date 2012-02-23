@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Diagnostics.CodeAnalysis;
+using InnerTrack.Web.Models;
 
 namespace InnerTrack.Web.Controllers
 {
@@ -12,9 +13,11 @@ namespace InnerTrack.Web.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Modify this template to kick-start your ASP.NET MVC application.";
+            var model = new DashboardModel();
+            model.ProjectStatuses = new List<ListItemProjectStatusModel>();
+            model.FeedEvents = new List<ListItemEventModel>();
 
-            return View();
+            return View(model);
         }
     }
 }
